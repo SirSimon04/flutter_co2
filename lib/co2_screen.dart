@@ -84,6 +84,8 @@ class _Co2ScreenState extends State<Co2Screen> {
         Expanded(
           flex: 2,
           child: ReusableCard(
+            edgeInsets: EdgeInsets.fromLTRB(
+                edgeInsetBig, edgeInsetBig, edgeInsetBig, edgeInsetSmall),
             color: kExpandedCardActiveColor,
             cardChild: SfCartesianChart(
               plotAreaBorderWidth: 0,
@@ -108,6 +110,8 @@ class _Co2ScreenState extends State<Co2Screen> {
             children: <Widget>[
               Expanded(
                 child: ReusableCard(
+                  edgeInsets: EdgeInsets.fromLTRB(edgeInsetBig, edgeInsetSmall,
+                      edgeInsetSmall, edgeInsetSmall),
                   color: kExpandedCardActiveColor,
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,6 +121,8 @@ class _Co2ScreenState extends State<Co2Screen> {
               ),
               Expanded(
                 child: ReusableCard(
+                  edgeInsets: EdgeInsets.fromLTRB(edgeInsetSmall,
+                      edgeInsetSmall, edgeInsetBig, edgeInsetSmall),
                   color: kExpandedCardActiveColor,
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -135,6 +141,8 @@ class _Co2ScreenState extends State<Co2Screen> {
           children: [
             Expanded(
               child: ReusableCard(
+                edgeInsets: EdgeInsets.fromLTRB(
+                    edgeInsetBig, edgeInsetSmall, edgeInsetBig, edgeInsetBig),
                 color: kExpandedCardActiveColor,
                 cardChild: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
