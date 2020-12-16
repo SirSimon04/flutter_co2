@@ -27,35 +27,25 @@ class _Co2ScreenState extends State<Co2Screen> {
   int id3 = 0;
   int id4 = 0;
 
+  List<ChartData> chartData = [];
+
   Future<void> getData() async {
     var decodedData =
         await NetworkHelper('https://co2.uber.space/statusNow/T').getData();
+    print(decodedData);
+    for (var item in decodedData) {
+      print(item['ID']);
+      setState(() {
+        chartData.add(ChartData(item['ID'], item['co2'], kRedGew));
+      });
+      print(chartData);
+    }
     for (int i = 0; i < 3; i++) {
       print(decodedData[i]['co2']);
     }
-    setState(() {
-      co0 = decodedData[0]['co2'];
-      co1 = decodedData[1]['co2'];
-      co2 = decodedData[2]['co2'];
-      co3 = decodedData[3]['co2'];
-      co4 = decodedData[4]['co2'];
-
-      id0 = decodedData[0]['ID'];
-      id1 = decodedData[1]['ID'];
-      id2 = decodedData[2]['ID'];
-      id3 = decodedData[3]['ID'];
-      id4 = decodedData[4]['ID'];
-    });
   }
 
   List<LineSeries<ChartData, num>> getLineSeries() {
-    final List<ChartData> chartData = <ChartData>[
-      ChartData(id0, co0, kRedGew),
-      ChartData(id1, co1, kRedGew),
-      ChartData(id2, co2, kRedGew),
-      ChartData(id3, co3, kRedGew),
-      ChartData(id4, co4, kRedGew),
-    ];
     return <LineSeries<ChartData, num>>[
       LineSeries(
         animationDuration: 2500,
@@ -72,7 +62,6 @@ class _Co2ScreenState extends State<Co2Screen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
