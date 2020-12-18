@@ -6,48 +6,41 @@ import 'constants.dart';
 import 'reusable_card.dart';
 
 class Co2Screen extends StatefulWidget {
+  Co2Screen({Key key}) : super(key: key);
   @override
-  _Co2ScreenState createState() => _Co2ScreenState();
+  Co2ScreenState createState() => Co2ScreenState();
 }
 
-class _Co2ScreenState extends State<Co2Screen> {
-  String tCo2 = '?';
-  String tTemp = '?';
-  String tScore = '?';
-
-  double co0 = 0;
-  double co1 = 0;
-  double co2 = 0;
-  double co3 = 0;
-  double co4 = 0;
-
-  int id0 = 0;
-  int id1 = 0;
-  int id2 = 0;
-  int id3 = 0;
-  int id4 = 0;
+class Co2ScreenState extends State<Co2Screen> {
+  double tCo2 = 0;
+  double tTemp = 0;
+  double tScore = 0;
+  double tH2o = 0;
 
   List<ChartData> chartData = [];
 
   Future<void> getData() async {
     var decodedData =
         await NetworkHelper('https://co2.uber.space/statusNow/T').getData();
-    print(decodedData);
-    for (var item in decodedData) {
-      print(item['ID']);
-      setState(() {
-        chartData.add(ChartData(item['ID'], item['co2'], kRedGew));
-      });
-      print(chartData);
-    }
-    for (int i = 0; i < 3; i++) {
-      print(decodedData[i]['co2']);
-    }
+    String test = decodedData[0]["DatumZeit"];
+    print(test);
+    print(test.substring(17, 22));
+    // print(test.split(" ")[4]);
+    setState(() {
+      for (var item in decodedData) {
+        chartData.add(ChartData(item["ID"], item['co2'], kRedGew));
+      }
+      tTemp = decodedData[0]['Temp'];
+      tCo2 = decodedData[0]['co2'];
+      tScore = decodedData[0]['score'];
+      tH2o = decodedData[0]['h2o'];
+    });
   }
 
-  List<LineSeries<ChartData, num>> getLineSeries() {
-    return <LineSeries<ChartData, num>>[
-      LineSeries(
+  List<SplineSeries<ChartData, num>> getLineSeries() {
+    return <SplineSeries<ChartData, num>>[
+      SplineSeries(
+        splineType: SplineType.natural,
         animationDuration: 2500,
         dataSource: chartData,
         pointColorMapper: (ChartData chart, _) => chart.segmentColor,
@@ -55,7 +48,7 @@ class _Co2ScreenState extends State<Co2Screen> {
         yValueMapper: (ChartData chart, _) => chart.y,
         width: 2,
         name: 'Messwert',
-        markerSettings: MarkerSettings(isVisible: true),
+        markerSettings: MarkerSettings(isVisible: false),
       ),
     ];
   }
@@ -79,10 +72,11 @@ class _Co2ScreenState extends State<Co2Screen> {
             cardChild: SfCartesianChart(
               plotAreaBorderWidth: 0,
               title: ChartTitle(text: 'CO2-Messwerte'),
-              primaryXAxis: NumericAxis(
+              primaryXAxis: CategoryAxis(
                 edgeLabelPlacement: EdgeLabelPlacement.shift,
-                interval: 1,
+                interval: 5,
                 majorGridLines: MajorGridLines(width: 0),
+                labelRotation: 60,
               ),
               primaryYAxis: NumericAxis(
                 labelFormat: '{value}',
@@ -90,7 +84,8 @@ class _Co2ScreenState extends State<Co2Screen> {
                 majorTickLines: MajorTickLines(color: Colors.transparent),
               ),
               series: getLineSeries(),
-              tooltipBehavior: TooltipBehavior(enable: true),
+              tooltipBehavior:
+                  TooltipBehavior(enable: true, canShowMarker: false),
             ),
           ),
         ),
@@ -104,7 +99,10 @@ class _Co2ScreenState extends State<Co2Screen> {
                   color: kExpandedCardActiveColor,
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[Text('CO2: 990ppm'), Text('Temp: 29°C')],
+                    children: <Widget>[
+                      Text('CO2: ${tCo2.toStringAsFixed(0)}ppm'),
+                      Text('Temp: $tTemp°C')
+                    ],
                   ),
                 ),
               ),
@@ -116,7 +114,7 @@ class _Co2ScreenState extends State<Co2Screen> {
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text('Feuchtigkeit: 30 g/m3'),
+                      Text('Feuchtigkeit: $tH2o g/m3'),
                       Text('Lautstärke: 80 dB')
                     ],
                   ),
@@ -138,7 +136,7 @@ class _Co2ScreenState extends State<Co2Screen> {
                   children: <Widget>[
                     Text('Gesamtscore der Werte'),
                     Text(
-                      '72/100',
+                      '${tScore.toStringAsFixed(0)}/100',
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 50.0,

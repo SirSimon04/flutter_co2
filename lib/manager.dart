@@ -6,10 +6,9 @@ import 'choose_room.dart';
 import 'co2_screen.dart';
 import 'info.dart';
 import 'dart:io' show Platform;
+import 'package:community_material_icon/community_material_icon.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
-
   @override
   HomePageState createState() => HomePageState();
 }
@@ -66,6 +65,14 @@ class HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: kRedGew,
           title: Text('CO2-School'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                CommunityMaterialIcons.reload,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
         body: Center(
           child: widgetOptions.elementAt(selectedIndex),
