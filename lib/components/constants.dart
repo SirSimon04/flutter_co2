@@ -11,3 +11,5 @@ const kExpandedCardActiveColor = Color(0xFF1D1E33);
 const double edgeInsetBig = 15.0;
 
 const double edgeInsetSmall = 6.0;
+
+List<String> roomList = ['T', 'A100', 'A102'];

@@ -1,3 +1,5 @@
+import 'package:flutter_co2/screens/choose_room.dart';
+
 import 'manager.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Color(0xFF0A0E21),
           scaffoldBackgroundColor: Color(0xFF0A0E21),
         ),
+        routes: {'/roomPicker': (context) => RoomPickerWidget()},
         title: 'CO2',
         home: HomePage());
   }

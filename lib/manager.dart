@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'components/constants.dart';
 import 'screens/choose_room.dart';
-import 'screens/co2_screen.dart';
+import 'package:flutter_co2/screens/co2_screen.dart';
 import 'screens/info.dart';
 import 'dart:io' show Platform;
 import 'package:community_material_icon/community_material_icon.dart';
@@ -14,18 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int selectedIndex = 1;
+  GlobalKey<Co2ScreenState> _globalKey = GlobalKey();
+
+  int selectedIndex = 0;
   final widgetOptions = [
-    InformationWidget(),
     Co2Screen(),
-    RoomPickerWidget(),
+    InformationWidget(),
   ];
 
   List<BottomNavigationBarItem> bottomNavigationBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.business),
-      label: 'Raumauswahl',
-    ),
     BottomNavigationBarItem(
       icon: Icon(Icons.location_city),
       label: 'Übersicht',
@@ -62,16 +59,20 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _globalKey,
         appBar: AppBar(
           backgroundColor: kRedGew,
           title: Text('CO2-School'),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(
-                CommunityMaterialIcons.reload,
+              icon: Icon(
+                Icons.business,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                //TODO Implementation of reload
+                Navigator.pushNamed(context, '/roomPicker');
+              },
             ),
           ],
         ),
