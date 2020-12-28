@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'constants.dart';
-import 'choose_room.dart';
-import 'co2_screen.dart';
-import 'info.dart';
+import 'components/constants.dart';
+import 'screens/choose_room.dart';
+import 'screens/co2_screen.dart';
+import 'screens/info.dart';
 import 'dart:io' show Platform;
 import 'package:community_material_icon/community_material_icon.dart';
 
@@ -71,6 +71,7 @@ class HomePageState extends State<HomePage> {
                 CommunityMaterialIcons.reload,
                 color: Colors.white,
               ),
+              onPressed: () {},
             ),
           ],
         ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'networking.dart';
+import 'package:flutter_co2/services/networking.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'constants.dart';
-import 'reusable_card.dart';
+import 'package:flutter_co2/components/constants.dart';
+import 'package:flutter_co2/components/reusable_card.dart';
+import 'dart:developer';
 
 class Co2Screen extends StatefulWidget {
   Co2Screen({Key key}) : super(key: key);
@@ -20,20 +21,25 @@ class Co2ScreenState extends State<Co2Screen> {
   List<ChartData> chartData = [];
 
   Future<void> getData() async {
+    log("get data called");
     var decodedData =
-        await NetworkHelper('https://co2.uber.space/statusNow/T').getData();
-    String test = decodedData[0]["DatumZeit"];
-    print(test);
-    print(test.substring(17, 22));
-    // print(test.split(" ")[4]);
+        await NetworkHelper('https://co2.uber.space/app/statusNow/T').getData();
     setState(() {
       for (var item in decodedData) {
-        chartData.add(ChartData(item["ID"], item['co2'], kRedGew));
+        chartData.insert(0, ChartData(item["ID"], item['co2'], kRedGew));
       }
-      tTemp = decodedData[0]['Temp'];
-      tCo2 = decodedData[0]['co2'];
-      tScore = decodedData[0]['score'];
-      tH2o = decodedData[0]['h2o'];
+      if (decodedData[0]['Temp'] != null) {
+        tTemp = decodedData[0]['Temp'];
+      }
+      if (decodedData[0]['co2'] != null) {
+        tCo2 = decodedData[0]['co2'];
+      }
+      if (decodedData[0]['score'] != null) {
+        tScore = decodedData[0]['score'];
+      }
+      if (decodedData[0]['h2o'] != null) {
+        tH2o = decodedData[0]['h2o'];
+      }
     });
   }
 
@@ -55,6 +61,7 @@ class Co2ScreenState extends State<Co2Screen> {
 
   @override
   void initState() {
+    log("init state called");
     super.initState();
     getData();
   }
@@ -71,7 +78,7 @@ class Co2ScreenState extends State<Co2Screen> {
             color: kExpandedCardActiveColor,
             cardChild: SfCartesianChart(
               plotAreaBorderWidth: 0,
-              title: ChartTitle(text: 'CO2-Messwerte'),
+              title: ChartTitle(text: 'CO2-Messwerteee!'),
               primaryXAxis: CategoryAxis(
                 edgeLabelPlacement: EdgeLabelPlacement.shift,
                 interval: 5,
@@ -100,7 +107,7 @@ class Co2ScreenState extends State<Co2Screen> {
                   cardChild: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text('CO2: ${tCo2.toStringAsFixed(0)}ppm'),
+                      Text('CO2: ${tCo2 /*.toStringAsFixed(0)*/}ppm'),
                       Text('Temp: $tTemp°C')
                     ],
                   ),
@@ -136,7 +143,7 @@ class Co2ScreenState extends State<Co2Screen> {
                   children: <Widget>[
                     Text('Gesamtscore der Werte'),
                     Text(
-                      '${tScore.toStringAsFixed(0)}/100',
+                      '${tScore /*.toStringAsFixed(0)*/}/100',
                       style: TextStyle(
                         color: Colors.green,
                         fontSize: 50.0,
