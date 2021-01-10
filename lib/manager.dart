@@ -10,17 +10,21 @@ import 'package:community_material_icon/community_material_icon.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin<HomePage> {
-  GlobalKey<Co2ScreenState> _globalKey = GlobalKey();
+class HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
 
-  int selectedIndex = 0;
-  final widgetOptions = [
-    Co2Screen(),
-    InformationWidget(),
+  final PageStorageBucket bucket = PageStorageBucket();
+
+  final List<Widget> pages = [
+    Co2Screen(
+      key: PageStorageKey("Co2-Page"),
+    ),
+    InformationWidget(
+      key: PageStorageKey('InformationPage'),
+    ),
   ];
 
   List<BottomNavigationBarItem> bottomNavigationBarItems = [
@@ -39,7 +43,7 @@ class _HomePageState extends State<HomePage>
     return BottomNavigationBar(
       items: bottomNavigationBarItems,
       backgroundColor: kRedGew,
-      currentIndex: selectedIndex,
+      currentIndex: _selectedIndex,
       fixedColor: kAccentColor,
       unselectedItemColor: kInactiveBottomItem,
       onTap: onItemTapped,
@@ -50,7 +54,7 @@ class _HomePageState extends State<HomePage>
     return CupertinoTabBar(
       items: bottomNavigationBarItems,
       backgroundColor: kRedGew,
-      currentIndex: selectedIndex,
+      currentIndex: _selectedIndex,
       activeColor: kAccentColor,
       inactiveColor: kInactiveBottomItem,
       onTap: onItemTapped,
@@ -58,30 +62,11 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _globalKey,
-        appBar: AppBar(
-          backgroundColor: kRedGew,
-          title: Text('CO2-School'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.business,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                //TODO Implementation of reload
-                Navigator.pushNamed(context, '/roomPicker');
-              },
-            ),
-          ],
-        ),
-        body: Center(
-          child: widgetOptions.elementAt(selectedIndex),
+        body: PageStorage(
+          child: pages[_selectedIndex],
+          bucket: bucket,
         ),
         bottomNavigationBar:
             Platform.isIOS ? iosBottomTabBar() : androidBottomTabBar());
@@ -89,7 +74,7 @@ class _HomePageState extends State<HomePage>
 
   void onItemTapped(int index) {
     setState(() {
-      selectedIndex = index;
+      _selectedIndex = index;
     });
   }
 }
