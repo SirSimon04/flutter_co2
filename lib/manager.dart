@@ -10,10 +10,11 @@ import 'package:community_material_icon/community_material_icon.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  HomePageState createState() => HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
   GlobalKey<Co2ScreenState> _globalKey = GlobalKey();
 
   int selectedIndex = 0;
@@ -55,6 +56,9 @@ class HomePageState extends State<HomePage> {
       onTap: onItemTapped,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

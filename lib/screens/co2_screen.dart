@@ -18,27 +18,32 @@ class Co2ScreenState extends State<Co2Screen> {
   double tScore = 0;
   double tH2o = 0;
 
+  String selectedRoom = 'A100';
+
   List<ChartData> chartData = [];
 
-  Future<void> getData() async {
+  Future<void> getData(String room) async {
     log("get data called");
     var decodedData =
-        await NetworkHelper('https://co2.uber.space/app/statusNow/T').getData();
+        await NetworkHelper('https://co2.uber.space/app/statusNow/$room')
+            .getData();
     setState(() {
-      for (var item in decodedData) {
-        chartData.insert(0, ChartData(item["ID"], item['co2'], kRedGew));
-      }
-      if (decodedData[0]['Temp'] != null) {
-        tTemp = decodedData[0]['Temp'];
-      }
-      if (decodedData[0]['co2'] != null) {
-        tCo2 = decodedData[0]['co2'];
-      }
-      if (decodedData[0]['score'] != null) {
-        tScore = decodedData[0]['score'];
-      }
-      if (decodedData[0]['h2o'] != null) {
-        tH2o = decodedData[0]['h2o'];
+      if (decodedData.length != 0) {
+        for (var item in decodedData) {
+          chartData.insert(0, ChartData(item["ID"], item['co2'], kRedGew));
+        }
+        if (decodedData[0]['Temp'] != null) {
+          tTemp = decodedData[0]['Temp'];
+        }
+        if (decodedData[0]['co2'] != null) {
+          tCo2 = decodedData[0]['co2'];
+        }
+        if (decodedData[0]['score'] != null) {
+          tScore = decodedData[0]['score'];
+        }
+        if (decodedData[0]['h2o'] != null) {
+          tH2o = decodedData[0]['h2o'];
+        }
       }
     });
   }
@@ -63,7 +68,7 @@ class Co2ScreenState extends State<Co2Screen> {
   void initState() {
     log("init state called");
     super.initState();
-    getData();
+    getData(selectedRoom);
   }
 
   @override
